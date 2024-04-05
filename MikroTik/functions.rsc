@@ -20,7 +20,6 @@
     :local address
 
     :for i from=( [:len $ip] - 1) to=0 do={
-        #:log info ("DEBUG " . [:pick $ip ($i-1)])
         :if ( ([:pick $ip $i] .  [:pick $ip ($i-1)]) = "::") do={
             :set address [:pick $ip 0 ($i-1)]
         }
@@ -46,6 +45,23 @@
     }
 
     :return ([:toarray $addressesStr])
+}
+
+## ==== Function "functionGetPrefixLengthFromIPv6" ====
+:local functionGetPrefixLengthFromIPv6 do={
+    :local prefixLength
+
+    :for i from=( [:len $ip] - 1) to=0 do={
+        :if ( [:pick $ip $i] = "/") do={
+            :set prefixLength [:pick $ip ($i+1) [:len $ip]]
+        }
+    }
+
+    :if ([:tostr $prefixLength] = "") do={
+        :set prefixLength 128
+    }
+
+    :return ($prefixLength)
 }
 
 ## ==== Function "functionResolveDNS" ====
