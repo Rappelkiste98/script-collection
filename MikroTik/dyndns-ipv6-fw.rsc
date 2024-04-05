@@ -29,7 +29,6 @@
     :local address
 
     :for i from=( [:len $ip] - 1) to=0 do={
-        #:log info ("DEBUG " . [:pick $ip ($i-1)])
         :if ( ([:pick $ip $i] .  [:pick $ip ($i-1)]) = "::") do={
             :set address [:pick $ip 0 ($i-1)]
         }
@@ -66,7 +65,7 @@
 
 :foreach client in=$fullClients do={
     :if ([:len [/ipv6 firewall address-list find address=($client . "/128") comment=$clientComment]] = 0) do={
-        :log info (">>> Firewall IPv6 Addresse (" . $client . ") requires Update!")
+        :log info (">>> FW dynIPv6 || Firewall IPv6 Addresse (" . $client . ") requires Update!")
         :set update true
     }
 }
@@ -78,7 +77,7 @@
         /ipv6 firewall address-list add list=$listName address=$client comment=$clientComment;
     }
 
-    :log info (">>> Firewall IPv6 Addresses successfully Updated!")
+    :log info (">>> FW dynIPv6 || Firewall IPv6 Addresses successfully Updated!")
 }
 
 #:log info ("TEST: " . $fullClients )
