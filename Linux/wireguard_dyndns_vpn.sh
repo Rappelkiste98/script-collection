@@ -6,7 +6,7 @@ domain="test.domain.de" # Domain des Peers, dessen IP geprueft werden soll
 
 # Programmablauf ab hier:
 wgIP4=$(wg show $interface endpoints | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}")
-wgIP6=$(wg show $interface endpoints | grep -E -o "([0-9a-f]{1,4}[:]){2,7}[0-9a-f]{1,4}")
+wgIP6=$(wg show $interface endpoints | grep -E -o "([0-9a-f]{1,4}[:]){1,4}([:]?)([0-9a-f]{1,4}[:]?){1,4}")
 wgHandshakeDiff=$[ $(date +%s) - $(wg show $interface latest-handshakes | grep -E -o "[0-9]{10,99}") ]
 echo "wg IPv4: $wgIP4"
 echo "wg IPv6: $wgIP6"
