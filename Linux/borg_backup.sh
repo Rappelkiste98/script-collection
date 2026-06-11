@@ -1,6 +1,5 @@
 #!/bin/bash
 #--------------------- VARIABLES ---------------------
-DIR='/path/to/script'
 NAME='ExampleNAS'
 DATA_PATH='/path/to/data'
 REPO_PATH='/path/to/borg-repository'
@@ -8,24 +7,17 @@ START_CMD='systemctl start smbd.service'
 STOP_CMD='systemctl stop smbd.service'
 COMPRESSION='lz4' # Default => lz4,default
 REPO_PRUNE='--keep-last 14 --keep-daily 14 --keep-monthly 6 --keep-yearly 1'
+LOG_PRUNE=365
 
 DEBUG=0
+DIR=$(dirname "$(realpath "$0")")
 LOG_FILE="$(date -I).log"
-LOG_DIR=$DIR"/log/$(date +'%Y')/$(date +'%m')"
-#--------------------- LOG FOLDERS ---------------------
-for dir in $(echo $LOG_DIR | tr "/" "\n")
-do
-  if [ -z $path ]; then
-    path=$dir
-  else
-    path=$path"/"$dir
-  fi
+LOG_DIR="$DIR/log/$(date +'%Y')/$(date +'%m')"
+#--------------------- CREATE & CLEAR LOG FOLDERS ---------------------
+mkdir -p "$LOG_DIR"
 
-  if [ ! -d $path ]; then
-    mkdir $path
-  fi
-done
-
+find "$DIR/log" -type f -name "*.log" -mtime +$LOG_PRUNE -delete && \
+find "$DIR/log" -type d -empty -delete
 #--------------------- FUNCTIONS ---------------------
 log() {
   case $1 in
