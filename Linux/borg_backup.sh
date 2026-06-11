@@ -14,10 +14,10 @@ DIR=$(dirname "$(realpath "$0")")
 LOG_FILE="$(date -I).log"
 LOG_DIR="$DIR/log/$(date +'%Y')/$(date +'%m')"
 #--------------------- CREATE & CLEAR LOG FOLDERS ---------------------
-mkdir -p "$LOG_DIR"
-
-find "$DIR/log" -type f -name "*.log" -mtime +$LOG_PRUNE -delete && \
+find "$DIR/log" -type f -name "*.log" -mtime +$LOG_PRUNE -delete
 find "$DIR/log" -type d -empty -delete
+
+mkdir -p "$LOG_DIR"
 #--------------------- FUNCTIONS ---------------------
 log() {
   case $1 in
@@ -29,12 +29,12 @@ log() {
 
   if [ $# \> 1 ]; then
     echo -e "$c[$(date -Ins)] [$1] $2 \033[0m"
-    echo "[$(date -Ins)] [$1] $2" >> $path"/"$LOG_FILE
+    echo "[$(date -Ins)] [$1] $2" >> $LOG_DIR"/"$LOG_FILE
   else
     while read -r line; do
       # Process each line of input here
       echo -e "$c[$(date -Ins)] [$1] $line \033[0m"
-      echo "[$(date -Ins)] [$1] $line" >> $path"/"$LOG_FILE
+      echo "[$(date -Ins)] [$1] $line" >> $LOG_DIR"/"$LOG_FILE
     done
   fi
 }
